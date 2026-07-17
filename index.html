@@ -302,7 +302,7 @@ header.hero p{
   gap:22px;
 }
 
-a.card{
+.card{
   position:relative;
   overflow:hidden;
   display:flex;
@@ -319,10 +319,11 @@ a.card{
   text-decoration:none;
   color:inherit;
   box-shadow:0 22px 48px rgba(0,0,0,.28);
+  cursor:pointer;
   transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease;
 }
 
-a.card::before{
+.card::before{
   content:"";
   position:absolute;
   inset:-1px;
@@ -335,7 +336,7 @@ a.card::before{
   opacity:.7;
 }
 
-a.card::after{
+.card::after{
   content:"";
   position:absolute;
   inset:auto -20% -45%;
@@ -346,12 +347,12 @@ a.card::after{
   transition:opacity .28s ease;
 }
 
-a.card:hover{
+.card:hover{
   transform:translateY(-10px) scale(1.02);
   border-color:rgba(94,162,255,.42);
   box-shadow:0 34px 72px rgba(0,0,0,.40), 0 0 34px rgba(94,162,255,.18);
 }
-a.card:hover::after{opacity:1}
+.card:hover::after{opacity:1}
 
 .card-top{
   display:flex;
@@ -377,6 +378,57 @@ a.card:hover::after{opacity:1}
   color:#C6D2EA;
   font-size:14px;
   line-height:1.6;
+}
+
+.card-preview{
+  position:relative;
+  margin:16px 0;
+  border-radius:16px;
+  overflow:hidden;
+  aspect-ratio:16/9;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--line);
+}
+.card-preview iframe{
+  position:absolute;
+  top:0;left:0;
+  width:400%;
+  height:400%;
+  border:0;
+  transform:scale(.25);
+  transform-origin:top left;
+  pointer-events:none;
+  background:#0b1224;
+}
+.card-preview .preview-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(180deg, rgba(5,8,22,0) 45%, rgba(5,8,22,.62) 100%);
+  opacity:0;
+  transition:opacity .25s ease;
+}
+.card:hover .preview-overlay{opacity:1}
+.preview-open{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:9px 16px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.22);
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:.02em;
+}
+.preview-open svg{width:14px;height:14px;stroke:#EAF1FF}
+.card-click{
+  position:absolute;
+  inset:0;
+  z-index:5;
 }
 
 .card-bottom{
@@ -406,7 +458,7 @@ a.card:hover::after{opacity:1}
   transition:transform .28s ease, background .28s ease, border-color .28s ease;
 }
 .arrow svg{width:18px;height:18px;stroke:#EAF1FF}
-a.card:hover .arrow{
+.card:hover .arrow{
   transform:translateX(6px);
   background:linear-gradient(135deg,var(--blue),var(--violet));
   border-color:transparent;
@@ -486,7 +538,7 @@ footer{
       <span class="count">02 painéis</span>
     </div>
     <div class="grid">
-      <a class="card" href="https://datastudio.google.com/reporting/f9a8ee56-4644-411a-a95e-154d46d82c9f" target="_blank" rel="noopener">
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">Gerenciamento de RNC</div>
@@ -494,12 +546,17 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/f9a8ee56-4644-411a-a95e-154d46d82c9f" loading="lazy" title="Prévia - Gerenciamento de RNC" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">RNC</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
-      <a class="card" href="https://datastudio.google.com/reporting/3e1463f1-f7aa-4329-9ca7-b0e91464f8a0" target="_blank" rel="noopener">
+        <a class="card-click" href="https://datastudio.google.com/reporting/f9a8ee56-4644-411a-a95e-154d46d82c9f" target="_blank" rel="noopener" aria-label="Abrir Gerenciamento de RNC"></a>
+      </div>
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">Performance de Fornecedores — HNK</div>
@@ -507,11 +564,16 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/3e1463f1-f7aa-4329-9ca7-b0e91464f8a0" loading="lazy" title="Prévia - Performance de Fornecedores — HNK" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">Fornecedores</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
+        <a class="card-click" href="https://datastudio.google.com/reporting/3e1463f1-f7aa-4329-9ca7-b0e91464f8a0" target="_blank" rel="noopener" aria-label="Abrir Performance de Fornecedores — HNK"></a>
+      </div>
     </div>
   </div>
 
@@ -524,7 +586,7 @@ footer{
       <span class="count">02 painéis</span>
     </div>
     <div class="grid">
-      <a class="card" href="https://datastudio.google.com/reporting/440679fc-3291-49e8-a571-d7c82ca13107" target="_blank" rel="noopener">
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">Painel Executivo de Auditorias — Geral</div>
@@ -532,12 +594,17 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/440679fc-3291-49e8-a571-d7c82ca13107" loading="lazy" title="Prévia - Painel Executivo de Auditorias — Geral" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">Auditoria</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
-      <a class="card" href="https://datastudio.google.com/reporting/3bdf4e75-810a-498d-8422-6e2a63469514" target="_blank" rel="noopener">
+        <a class="card-click" href="https://datastudio.google.com/reporting/440679fc-3291-49e8-a571-d7c82ca13107" target="_blank" rel="noopener" aria-label="Abrir Painel Executivo de Auditorias — Geral"></a>
+      </div>
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">Painel Executivo de Auditorias — HNK</div>
@@ -545,11 +612,16 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/3bdf4e75-810a-498d-8422-6e2a63469514" loading="lazy" title="Prévia - Painel Executivo de Auditorias — HNK" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">Auditoria</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
+        <a class="card-click" href="https://datastudio.google.com/reporting/3bdf4e75-810a-498d-8422-6e2a63469514" target="_blank" rel="noopener" aria-label="Abrir Painel Executivo de Auditorias — HNK"></a>
+      </div>
     </div>
   </div>
 
@@ -562,7 +634,7 @@ footer{
       <span class="count">02 painéis</span>
     </div>
     <div class="grid">
-      <a class="card" href="https://datastudio.google.com/reporting/42ede289-5f17-4a95-8af5-8d2d5c058a7b" target="_blank" rel="noopener">
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">Atividades de Controle de Qualidade — CQ</div>
@@ -570,12 +642,17 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/42ede289-5f17-4a95-8af5-8d2d5c058a7b" loading="lazy" title="Prévia - Atividades de Controle de Qualidade — CQ" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">CQ</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
-      <a class="card" href="https://datastudio.google.com/reporting/e0d9ab58-2443-4832-8783-aca7bf595317" target="_blank" rel="noopener">
+        <a class="card-click" href="https://datastudio.google.com/reporting/42ede289-5f17-4a95-8af5-8d2d5c058a7b" target="_blank" rel="noopener" aria-label="Abrir Atividades de Controle de Qualidade — CQ"></a>
+      </div>
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">Atividades Garantia da Qualidade</div>
@@ -583,11 +660,16 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/e0d9ab58-2443-4832-8783-aca7bf595317" loading="lazy" title="Prévia - Atividades Garantia da Qualidade" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">GQ</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
+        <a class="card-click" href="https://datastudio.google.com/reporting/e0d9ab58-2443-4832-8783-aca7bf595317" target="_blank" rel="noopener" aria-label="Abrir Atividades Garantia da Qualidade"></a>
+      </div>
     </div>
   </div>
 
@@ -600,7 +682,7 @@ footer{
       <span class="count">01 painel</span>
     </div>
     <div class="grid">
-      <a class="card" href="https://datastudio.google.com/reporting/9f0fa429-c24a-47d2-a502-a66507ae8b03" target="_blank" rel="noopener">
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">PDCA — Pesquisa de Percepção de Clientes 2025</div>
@@ -608,11 +690,16 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/9f0fa429-c24a-47d2-a502-a66507ae8b03" loading="lazy" title="Prévia - PDCA — Pesquisa de Percepção de Clientes 2025" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">PDCA</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
+        <a class="card-click" href="https://datastudio.google.com/reporting/9f0fa429-c24a-47d2-a502-a66507ae8b03" target="_blank" rel="noopener" aria-label="Abrir PDCA — Pesquisa de Percepção de Clientes 2025"></a>
+      </div>
     </div>
   </div>
 
@@ -625,7 +712,7 @@ footer{
       <span class="count">01 painel</span>
     </div>
     <div class="grid">
-      <a class="card" href="https://datastudio.google.com/reporting/9e893c9e-b23f-4413-a4ad-3b55ac796eeb" target="_blank" rel="noopener">
+      <div class="card">
         <div class="card-top">
           <div>
             <div class="card-title">GMUD — Gestão de Mudanças</div>
@@ -633,11 +720,16 @@ footer{
           </div>
           <span class="led"></span>
         </div>
+        <div class="card-preview">
+          <iframe src="https://datastudio.google.com/embed/reporting/9e893c9e-b23f-4413-a4ad-3b55ac796eeb" loading="lazy" title="Prévia - GMUD — Gestão de Mudanças" tabindex="-1" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <div class="preview-overlay"><span class="preview-open">Abrir painel<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span></div>
+        </div>
         <div class="card-bottom">
           <span class="tag">GMUD</span>
           <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
         </div>
-      </a>
+        <a class="card-click" href="https://datastudio.google.com/reporting/9e893c9e-b23f-4413-a4ad-3b55ac796eeb" target="_blank" rel="noopener" aria-label="Abrir GMUD — Gestão de Mudanças"></a>
+      </div>
     </div>
   </div>
 
