@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PierServ • Central de Business Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050816;
+  --bg2:#0b1224;
+  --panel:rgba(16,22,42,.72);
+  --panel-strong:rgba(20,28,52,.88);
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.16);
+  --text:#F5F7FB;
+  --muted:#A7B2C8;
+  --blue:#5EA2FF;
+  --cyan:#58E1FF;
+  --violet:#8B7CFF;
+  --green:#39D98A;
+  --amber:#FFB24D;
+  --radius:22px;
+  --shadow:0 24px 80px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  min-height:100vh;
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(94,162,255,.28), transparent 26%),
+    radial-gradient(circle at 90% 0%, rgba(139,124,255,.26), transparent 28%),
+    radial-gradient(circle at 80% 80%, rgba(88,225,255,.16), transparent 24%),
+    radial-gradient(circle at 0% 100%, rgba(57,217,138,.14), transparent 22%),
+    linear-gradient(135deg,#050816 0%, #0b1430 22%, #1a1f4d 48%, #0c2744 72%, #050816 100%);
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed; inset:0;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:48px 48px;
+  mask-image:radial-gradient(circle at 50% 0%, black 18%, transparent 72%);
+  pointer-events:none;
+}
+
+.bg-grid{display:none}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:1400px;
+  margin:20px auto 0;
+  padding:0 28px 70px;
+}
+
+nav{
+  position:sticky;
+  top:14px;
+  z-index:30;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  max-width:1400px;
+  margin:14px auto 0;
+  padding:16px 24px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:rgba(8,12,26,.58);
+  backdrop-filter:blur(18px);
+  box-shadow:0 12px 40px rgba(0,0,0,.28);
+}
+
+.brand{display:flex;align-items:center;gap:18px}
+.brand .mark{
+  width:88px;height:88px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:24px;
+  background:linear-gradient(135deg, rgba(94,162,255,.24), rgba(139,124,255,.22));
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 18px 44px rgba(94,162,255,.22);
+}
+.brand .mark img{width:78%;height:78%;object-fit:contain}
+.brand-text{display:flex;flex-direction:column;gap:4px}
+.brand-kicker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#8FB7FF;
+}
+.brand-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-.03em;
+}
+.brand-sub{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.nav-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.nav-chip{
+  padding:10px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  font-size:12px;
+  font-family:'JetBrains Mono',monospace;
+}
+
+header.hero{
+  position:relative;
+  margin:26px 0 34px;
+  padding:72px 56px;
+  border-radius:34px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.10);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(94,162,255,.30), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(139,124,255,.26), transparent 28%),
+    radial-gradient(circle at 70% 80%, rgba(88,225,255,.18), transparent 26%),
+    linear-gradient(145deg, rgba(15,24,52,.92), rgba(7,12,28,.92));
+  box-shadow:var(--shadow);
+}
+
+header.hero::before{
+  content:"";
+  position:absolute;
+  inset:-30%;
+  background:conic-gradient(from 180deg, rgba(94,162,255,.0), rgba(94,162,255,.18), rgba(139,124,255,.18), rgba(88,225,255,.10), rgba(94,162,255,.0));
+  filter:blur(40px);
+  animation:spin 24s linear infinite;
+}
+
+.hero-content{position:relative;z-index:1;max-width:980px}
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:#CFE0FF;
+  margin-bottom:24px;
+}
+.eyebrow::before{
+  content:"";
+  width:10px;height:10px;border-radius:50%;
+  background:#7CF7B6;
+  box-shadow:0 0 18px #7CF7B6;
+}
+
+h1{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(44px,6vw,74px);
+  line-height:1.02;
+  letter-spacing:-.05em;
+  margin-bottom:18px;
+  max-width:900px;
+}
+
+header.hero p{
+  max-width:760px;
+  font-size:18px;
+  line-height:1.7;
+  color:#D6DDF0;
+}
+
+.hero-actions{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-top:28px;
+}
+.hero-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:14px 18px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  text-decoration:none;
+  font-weight:600;
+}
+.hero-btn.primary{
+  background:linear-gradient(135deg,var(--blue),var(--violet));
+  border:none;
+  box-shadow:0 16px 34px rgba(94,162,255,.32);
+}
+
+.kpi-grid{
+  position:relative;
+  z-index:1;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:18px;
+  margin-top:34px;
+}
+
+.kpi{
+  padding:22px 22px 20px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.06);
+  backdrop-filter:blur(16px);
+  box-shadow:0 18px 40px rgba(0,0,0,.22);
+}
+.kpi .label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#AFC0DE;
+}
+.kpi .value{
+  margin-top:10px;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:40px;
+  font-weight:700;
+  letter-spacing:-.04em;
+}
+.kpi .delta{
+  margin-top:8px;
+  color:#7CF7B6;
+  font-size:13px;
+}
+
+.group{
+  display:grid;
+  grid-template-columns:260px 1fr;
+  gap:28px;
+  padding:18px 0;
+}
+
+.group-head{
+  position:sticky;
+  top:110px;
+  align-self:start;
+  padding:24px;
+  border-radius:24px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(14px);
+  box-shadow:0 18px 36px rgba(0,0,0,.18);
+}
+
+.icon-badge{
+  width:58px;height:58px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg, rgba(94,162,255,.20), rgba(139,124,255,.20));
+  border:1px solid rgba(255,255,255,.12);
+  margin-bottom:18px;
+}
+.icon-badge svg{width:26px;height:26px;stroke:#DCE7FF}
+
+.group-head h2{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:24px;
+  margin-bottom:10px;
+}
+.group-head .count{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:22px;
+}
+
+a.card{
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  min-height:210px;
+  padding:24px;
+  border-radius:26px;
+  border:1px solid rgba(255,255,255,.10);
+  background:
+    linear-gradient(160deg, rgba(18,26,50,.90), rgba(9,14,30,.86)),
+    radial-gradient(circle at top right, rgba(94,162,255,.18), transparent 34%);
+  backdrop-filter:blur(18px);
+  text-decoration:none;
+  color:inherit;
+  box-shadow:0 22px 48px rgba(0,0,0,.28);
+  transition:transform .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+
+a.card::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:26px;
+  padding:1px;
+  background:linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,0), rgba(94,162,255,.28));
+  -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+          mask-composite:exclude;
+  opacity:.7;
+}
+
+a.card::after{
+  content:"";
+  position:absolute;
+  inset:auto -20% -45%;
+  height:140px;
+  background:radial-gradient(circle, rgba(94,162,255,.26), transparent 62%);
+  filter:blur(18px);
+  opacity:0;
+  transition:opacity .28s ease;
+}
+
+a.card:hover{
+  transform:translateY(-10px) scale(1.02);
+  border-color:rgba(94,162,255,.42);
+  box-shadow:0 34px 72px rgba(0,0,0,.40), 0 0 34px rgba(94,162,255,.18);
+}
+a.card:hover::after{opacity:1}
+
+.card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.led{
+  width:12px;height:12px;border-radius:50%;
+  background:var(--card-accent,var(--blue));
+  box-shadow:0 0 18px var(--card-accent,var(--blue));
+}
+
+.card-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:22px;
+  line-height:1.25;
+  margin-bottom:10px;
+}
+
+.card-sub{
+  color:#C6D2EA;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.card-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.tag{
+  padding:7px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  color:#D7E3FF;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-family:'JetBrains Mono',monospace;
+}
+
+.arrow{
+  width:44px;height:44px;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  transition:transform .28s ease, background .28s ease, border-color .28s ease;
+}
+.arrow svg{width:18px;height:18px;stroke:#EAF1FF}
+a.card:hover .arrow{
+  transform:translateX(6px);
+  background:linear-gradient(135deg,var(--blue),var(--violet));
+  border-color:transparent;
+}
+
+footer{
+  margin-top:26px;
+  padding:28px 0 10px;
+  border-top:1px solid rgba(255,255,255,.08);
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  color:#B7C4DA;
+  font-size:13px;
+}
+.footer-brand{
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  color:#EAF1FF;
+}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media (max-width: 1100px){
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .group{grid-template-columns:1fr}
+  .group-head{position:relative;top:auto}
+}
+
+@media (max-width: 760px){
+  nav{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .brand .mark{width:74px;height:74px}
+  header.hero{padding:44px 24px}
+  h1{font-size:42px}
+  .kpi-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column}
+  .hero-btn{width:100%;justify-content:center}
+}
+</style>
+
+</head>
+<body>
+<div class="bg-grid"></div>
+
+
+<nav>
+  <div class="brand">
+    <span class="mark"><img src="data:image/png;base64,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" alt="PierServ"></span>
+    <div class="brand-text">
+      <span class="brand-kicker">Executive BI Hub</span>
+      <span class="brand-title">PierServ • Central de Business Intelligence</span>
+      <span class="brand-sub">Ambiente corporativo unificado para acesso aos dashboards estratégicos</span>
+    </div>
+  </div>
+
+  <div class="nav-meta">
+    <span class="nav-chip"><span style="color:#7CF7B6">●</span> Ambiente online</span>
+    <span class="nav-chip">Atualizado hoje • 08:32</span>
+    <span class="nav-chip">Diretoria Executiva</span>
+  </div>
+</nav>
+
+
+<div class="wrap">
+
+  
+<div class="group" style="--card-accent:var(--amber)">
+    <div class="group-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h2>RNC e Fornecedores</h2>
+      <span class="count">02 painéis</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://datastudio.google.com/reporting/f9a8ee56-4644-411a-a95e-154d46d82c9f" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Gerenciamento de RNC</div>
+            <div class="card-sub">Registro e tratativa de não conformidades</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">RNC</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="https://datastudio.google.com/reporting/3e1463f1-f7aa-4329-9ca7-b0e91464f8a0" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Performance de Fornecedores — HNK</div>
+            <div class="card-sub">Avaliação e histórico de fornecedores</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">Fornecedores</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group" style="--card-accent:var(--accent)">
+    <div class="group-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M9 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4"/><path d="m9 14 2 2 4-4"/></svg>
+      </div>
+      <h2>Auditorias</h2>
+      <span class="count">02 painéis</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://datastudio.google.com/reporting/440679fc-3291-49e8-a571-d7c82ca13107" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Painel Executivo de Auditorias — Geral</div>
+            <div class="card-sub">Consolidado de todas as unidades</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">Auditoria</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="https://datastudio.google.com/reporting/3bdf4e75-810a-498d-8422-6e2a63469514" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Painel Executivo de Auditorias — HNK</div>
+            <div class="card-sub">Auditorias da unidade HNK</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">Auditoria</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group" style="--card-accent:var(--teal)">
+    <div class="group-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <h2>Atividades CQ e GQ</h2>
+      <span class="count">02 painéis</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://datastudio.google.com/reporting/42ede289-5f17-4a95-8af5-8d2d5c058a7b" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Atividades de Controle de Qualidade — CQ</div>
+            <div class="card-sub">Inspeções e atividades de controle</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">CQ</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+      <a class="card" href="https://datastudio.google.com/reporting/e0d9ab58-2443-4832-8783-aca7bf595317" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">Atividades Garantia da Qualidade</div>
+            <div class="card-sub">Acompanhamento das atividades de GQ</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">GQ</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group" style="--card-accent:var(--pink)">
+    <div class="group-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"/></svg>
+      </div>
+      <h2>Percepção de Clientes</h2>
+      <span class="count">01 painel</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://datastudio.google.com/reporting/9f0fa429-c24a-47d2-a502-a66507ae8b03" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">PDCA — Pesquisa de Percepção de Clientes 2025</div>
+            <div class="card-sub">Resultados da pesquisa de satisfação</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">PDCA</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <div class="group" style="--card-accent:var(--violet)">
+    <div class="group-head">
+      <div class="icon-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-15.3 6.5L3 21"/><path d="M3 12a9 9 0 0 1 15.3-6.5L21 8"/><polyline points="3 16 3 21 8 21"/><polyline points="21 3 21 8 16 8"/></svg>
+      </div>
+      <h2>Gestão de Mudanças</h2>
+      <span class="count">01 painel</span>
+    </div>
+    <div class="grid">
+      <a class="card" href="https://datastudio.google.com/reporting/9e893c9e-b23f-4413-a4ad-3b55ac796eeb" target="_blank" rel="noopener">
+        <div class="card-top">
+          <div>
+            <div class="card-title">GMUD — Gestão de Mudanças</div>
+            <div class="card-sub">Controle e aprovação de mudanças</div>
+          </div>
+          <span class="led"></span>
+        </div>
+        <div class="card-bottom">
+          <span class="tag">GMUD</span>
+          <span class="arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg></span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  
+<footer>
+  <div>
+    <div class="footer-brand">PierServ • Central de Business Intelligence</div>
+    <div>Plataforma corporativa de navegação entre dashboards estratégicos.</div>
+  </div>
+
+  <div style="text-align:right">
+    <div>Versão executiva 2.0</div>
+    <div>Atualização automática • Julho 2026</div>
+  </div>
+</footer>
+
+
+</div>
+</body>
+</html>
